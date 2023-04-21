@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
-import { useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import {
   ChevronDownIcon,
   SearchIcon,
@@ -18,6 +18,7 @@ import {
 } from 'lucide-react-native';
 import Categories from '../components/Categories';
 import FeaturedRow from '../components/FeaturedRow';
+import sanityClient from '../sanity';
 
 const HomeScreen = () => {
   // navigation
@@ -29,6 +30,25 @@ const HomeScreen = () => {
       headerTitle: 'Custom Title',
       headerShown: false,
     });
+  }, []);
+
+  // use State for sanity
+  const [featuredCategories, setFeaturedCategories] = useState();
+
+  // fetch the data from sanity
+  useEffect(() => {
+    const query = `*[_type=='featured']{
+        ...,
+    restaurants[]->{
+      ...,
+      dishes[]->
+    }
+      }`;
+    const fetchData = async () => {
+      const data = await sanityClient.fetch(query);
+      setFeaturedCategories(data);
+    };
+    fetchData().catch((error) => console.log(error));
   }, []);
 
   return (
@@ -79,21 +99,16 @@ const HomeScreen = () => {
         {/* Categories */}
         <Categories />
         {/* Feature Rows */}
-        <FeaturedRow
-          title='Offers near you!'
-          description='Local stores might sound good tonight.'
-          id='1'
-        />
-        <FeaturedRow
-          title='Offers near you!'
-          description='Local stores might sound good tonight.'
-          id='1'
-        />
-        <FeaturedRow
-          title='Offers near you!'
-          description='Local stores might sound good tonight.'
-          id='1'
-        />
+        {featuredCategories?.map((category) => {
+          return (
+            <FeaturedRow
+              key={category._id}
+              title={category.name}
+              description={category.description}
+              id={category._id}
+            />
+          );
+        })}
       </ScrollView>
     </SafeAreaView>
   );

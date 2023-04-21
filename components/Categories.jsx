@@ -1,8 +1,19 @@
 import { View, Text, ScrollView } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CategoryCard from './CategoryCard';
+import sanityClient from '../sanity';
 
 const Categories = () => {
+  const [categories, setCategories] = useState();
+
+  useEffect(() => {
+    const query = `*[_type=='category']`;
+    const fetchData = async () => {
+      const data = await sanityClient.fetch(query);
+      setCategories(data);
+    };
+    fetchData().catch((error) => console.log(error));
+  }, []);
   return (
     <ScrollView
       horizontal
@@ -12,30 +23,14 @@ const Categories = () => {
         columnGap: 8,
       }}
     >
-      <CategoryCard
-        url='https://links.papareact.com/gn7'
-        title='first-one'
-      />
-      <CategoryCard
-        url='https://links.papareact.com/gn7'
-        title='second-one'
-      />
-      <CategoryCard
-        url='https://links.papareact.com/gn7'
-        title='third-one'
-      />
-      <CategoryCard
-        url='https://links.papareact.com/gn7'
-        title='Four-one'
-      />
-      <CategoryCard
-        url='https://links.papareact.com/gn7'
-        title='Fifth-one'
-      />
-      <CategoryCard
-        url='https://links.papareact.com/gn7'
-        title='Sicth-one'
-      />
+      {categories?.map((category) => {
+        return (
+          <CategoryCard
+            url={category.image}
+            title={category.name}
+          />
+        );
+      })}
     </ScrollView>
   );
 };

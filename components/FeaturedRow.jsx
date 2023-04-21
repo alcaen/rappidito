@@ -1,9 +1,29 @@
 import { View, Text, ScrollView } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowRight } from 'lucide-react-native';
 import RestaurantCard from './RestaurantCard';
+import sanityClient from '../sanity';
 
 const FeaturedRow = ({ title, description, id }) => {
+  const [restaurants, setRestaurants] = useState();
+  useEffect(() => {
+    const query = `*[_type=='featured' && _id==$id]{
+      ...,
+  restaurants[]->{
+    ...,
+    dishes[]->,
+    type-> {
+      name
+    }
+  }
+    }[0]`;
+    const fetchData = async () => {
+      const data = await sanityClient.fetch(query, { id });
+      setRestaurants(data?.restaurants);
+    };
+    fetchData().catch((error) => console.log(error));
+  }, []);
+
   return (
     <View>
       <View className='flex flex-row'>
@@ -24,34 +44,23 @@ const FeaturedRow = ({ title, description, id }) => {
         }}
         className='mt-2'
       >
-        <RestaurantCard
-          url='https://links.papareact.com/gn7'
-          name='Sushi Time'
-          category='Japanese'
-          location='Nearby - 123 Main St'
-          score={4.5}
-        />
-        <RestaurantCard
-          url='https://links.papareact.com/gn7'
-          name='Sushi Time'
-          category='Japanese'
-          location='Nearby - 123 Main St'
-          score={4.5}
-        />
-        <RestaurantCard
-          url='https://links.papareact.com/gn7'
-          name='Sushi Time'
-          category='Japanese'
-          location='Nearby - 123 Main St'
-          score={4.5}
-        />
-        <RestaurantCard
-          url='https://links.papareact.com/gn7'
-          name='Sushi Time'
-          category='Japanese'
-          location='Nearby - 123 Main St'
-          score={4.5}
-        />
+        {restaurants?.map((restaurant) => {
+          return (
+            <RestaurantCard
+              key={restaurant._id}
+              id={restaurant._id}
+              url={restaurant.image}
+              name={restaurant.name}
+              category={restaurant.type.name}
+              location={restaurant.address}
+              score={restaurant.rating}
+              description={restaurant.description}
+              dishes={restaurant.dishes}
+              long={restaurant.long}
+              lat={restaurant.lat}
+            />
+          );
+        })}
       </ScrollView>
     </View>
   );

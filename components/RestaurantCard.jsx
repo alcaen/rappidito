@@ -1,12 +1,24 @@
 import { View, Text, Image } from 'react-native';
 import React from 'react';
 import { MapPin, Star } from 'lucide-react-native';
+import { urlFor } from '../sanity';
 
-const RestaurantCard = ({ url, name, score, category, location }) => {
+const RestaurantCard = ({
+  url,
+  name,
+  score,
+  category,
+  location,
+  id,
+  description,
+  dishes,
+  long,
+  lat,
+}) => {
   return (
     <View className='bg-white rounded-md shadow shadow-black'>
       <Image
-        source={{ uri: url }}
+        source={{ uri: urlFor(url).url() }}
         className='h-28 w-52 rounded-t-md'
       />
       <View className='p-2 space-y-1'>
