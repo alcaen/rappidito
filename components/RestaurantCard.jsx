@@ -1,7 +1,8 @@
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { MapPin, Star } from 'lucide-react-native';
 import { urlFor } from '../sanity';
+import { useNavigation } from '@react-navigation/native';
 
 const RestaurantCard = ({
   url,
@@ -15,8 +16,26 @@ const RestaurantCard = ({
   long,
   lat,
 }) => {
+  const navigation = useNavigation();
+
   return (
-    <View className='bg-white rounded-md shadow shadow-black'>
+    <TouchableOpacity
+      className='bg-white rounded-md shadow shadow-black'
+      onPress={() => {
+        navigation.navigate('Restaurant', {
+          url,
+          name,
+          score,
+          category,
+          location,
+          id,
+          description,
+          dishes,
+          long,
+          lat,
+        });
+      }}
+    >
       <Image
         source={{ uri: urlFor(url).url() }}
         className='h-28 w-52 rounded-t-md'
@@ -43,7 +62,7 @@ const RestaurantCard = ({
           <Text className='text-xs overflow-x-hidden'>{location}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

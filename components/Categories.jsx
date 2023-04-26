@@ -26,6 +26,7 @@ const Categories = () => {
       {categories?.map((category) => {
         return (
           <CategoryCard
+            key={category._id}
             url={category.image}
             title={category.name}
           />
