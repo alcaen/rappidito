@@ -12,6 +12,7 @@
     "@expo/webpack-config": "^18.0.1",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
+    "@reduxjs/toolkit": "^1.9.5",
     "@sanity/client": "^5.4.2",
     "@sanity/image-url": "^1.0.2",
     "expo": "~48.0.11",
@@ -26,6 +27,7 @@
     "react-native-screens": "~3.20.0",
     "react-native-svg": "13.4.0",
     "react-native-web": "~0.18.11",
+    "react-redux": "^8.0.5",
     "tailwindcss": "^3.3.1"
   },
   "devDependencies": {
