@@ -4,14 +4,14 @@ import { urlFor } from '../sanity';
 import { MinusCircle, PlusCircle } from 'lucide-react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  selectBasketItems,
+  selectSigleItem,
   addToBasket,
   removeFromBasket,
 } from '../slices/basketSlice';
 
 const DishRow = ({ id, name, description, price, image }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const items = useSelector(selectBasketItems);
+  const items = useSelector((state) => selectSigleItem(state, id));
   const dispatch = useDispatch();
 
   const handleAdd = () => {
@@ -19,7 +19,7 @@ const DishRow = ({ id, name, description, price, image }) => {
   };
 
   const handleRemove = () => {
-    dispatch(removeFromBasket({ id }));
+    if (items.length > 0) dispatch(removeFromBasket({ id }));
   };
 
   return (
@@ -27,7 +27,7 @@ const DishRow = ({ id, name, description, price, image }) => {
       <TouchableOpacity
         className={
           'bg-white  w-full flex flex-row items-center px-4 py-2 space-x-3' +
-          (isOpen ? '' : ' border-b border-gray-400')
+          (isOpen ? null : ' border-b border-gray-400')
         }
         onPress={() => setIsOpen(!isOpen)}
       >
@@ -57,12 +57,15 @@ const Quantity = ({ items, handleAdd, handleRemove, id }) => {
   return (
     <View className='bg-white p-4 border-b border-gray-400'>
       <View className='flex flex-row space-x-3 items-center'>
-        <TouchableOpacity onPress={() => handleRemove()}>
-          <MinusCircle className='text-orange-600' />
+        <TouchableOpacity
+          onPress={() => handleRemove()}
+          disabled={items.length <= 0}
+        >
+          <MinusCircle
+            className={items.length <= 0 ? 'text-gray-300' : 'text-orange-600'}
+          />
         </TouchableOpacity>
-        <Text className='text-black'>
-          {items.filter((item) => item.id === id).length}
-        </Text>
+        <Text className='text-black'>{items.length}</Text>
         <TouchableOpacity onPress={() => handleAdd()}>
           <PlusCircle className='text-orange-600' />
         </TouchableOpacity>
