@@ -19,10 +19,13 @@ import {
 } from 'lucide-react-native';
 import DishRow from '../components/DishRow';
 import Basket from '../components/Basket';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectBasketTotal } from '../slices/basketSlice';
+import { useEffect } from 'react';
+import { setRestaurant } from '../slices/restaurantSlice';
 
 const RestaurantScreen = () => {
+  const dispatch = useDispatch();
   const totalPrice = useSelector(selectBasketTotal);
   const {
     params: {
@@ -38,6 +41,23 @@ const RestaurantScreen = () => {
       lat,
     },
   } = useRoute();
+
+  useEffect(() => {
+    dispatch(
+      setRestaurant({
+        url,
+        name,
+        score,
+        category,
+        location,
+        id,
+        description,
+        dishes,
+        long,
+        lat,
+      })
+    );
+  }, []);
 
   const navigation = useNavigation();
   useLayoutEffect(() => {
