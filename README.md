@@ -14,8 +14,12 @@ This projects is a rappi clone made with expo, react native and nativewind.
 - [x] Configure react navigation and screens
 - [x] Configure sanity
 - [x] Upload info to sanity
-- [ ] Create queries to call data
+- [x] Create queries to call data
+- [x] Configure react animations and progress bars
+- [x] Configure redux toolkit stores and actions
+- [x] Configure Google maps API key
+- [x] Update README.md
 
 ## Final Demo
 
-![Demo](./assets/demo.mov)
+![Demo](./assets/demo.gif)
