@@ -11,7 +11,11 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectRestaurant } from '../slices/restaurantSlice';
-import { selectBasketItems, selectBasketTotal } from '../slices/basketSlice';
+import {
+  removeFromBasket,
+  selectBasketItems,
+  selectBasketTotal,
+} from '../slices/basketSlice';
 import { useMemo } from 'react';
 import { useState } from 'react';
 import { X } from 'lucide-react-native';
@@ -73,7 +77,10 @@ const BasketScreen = () => {
         {Object.keys(groupedItems).map((key, i) => {
           const item = groupedItems[key];
           return (
-            <View className='w-full bg-white h-14 flex flex-row justify-between items-center px-4'>
+            <View
+              className='w-full bg-white h-14 flex flex-row justify-between items-center px-4'
+              key={i}
+            >
               <View className='flex flex-row items-center space-x-2'>
                 <Text className='text-orange-600 text-xs font-bold'>
                   {item.length} x
@@ -86,9 +93,13 @@ const BasketScreen = () => {
               </View>
               <View className='flex-row flex space-x-3 items-center'>
                 <Text>{USDollar.format(item[0].price * item.length)}</Text>
-                <Text className='text-orange-600 text-xs font-bold'>
-                  Remove
-                </Text>
+                <TouchableOpacity
+                  onPress={() => dispatch(removeFromBasket({ id: key }))}
+                >
+                  <Text className='text-orange-600 text-xs font-bold'>
+                    Remove
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           );
@@ -113,8 +124,11 @@ const BasketScreen = () => {
             {USDollar.format(total + 5.99)}
           </Text>
         </View>
-        <TouchableOpacity className='self-center py-3 bg-orange-600 w-full rounded-lg flex justify-center items-center shadow-md shadow-black'>
-          <Text className='text-white font-bold text-base'>Place Order</Text>
+        <TouchableOpacity
+          className='self-center py-3 bg-orange-600 w-full rounded-lg flex justify-center items-center shadow-md shadow-black'
+          onPress={() => navigation.navigate('PreparingOrder')}
+        >
+          <Text className='text-white font-bold text-base'>Place Orders</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

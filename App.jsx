@@ -6,6 +6,7 @@ import BasketScreen from './screens/BasketScreen';
 import { Provider } from 'react-redux';
 import 'react-native-url-polyfill/auto';
 import { store } from './store';
+import PreparingOrderScreen from './screens/PreparingOrderScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,16 @@ export default function App() {
               headerShown: false,
             }}
           />
+          <Stack.Screen
+            options={{ presentation: 'fullScreenModal', headerShown: false }}
+            name='PreparingOrder'
+            component={PreparingOrderScreen}
+          />
+          <Stack.Screen
+            name='Delivery'
+            component={DeliveryScreen}
+            options={{ presentation: 'fullScreenModal', headerShown: false }}
+          />
         </Stack.Navigator>
       </Provider>
     </NavigationContainer>
@@ -37,6 +48,7 @@ export default function App() {
 }
 
 import { NativeWindStyleSheet } from 'nativewind';
+import DeliveryScreen from './screens/DeliveryScreen';
 
 NativeWindStyleSheet.setOutput({
   default: 'native',

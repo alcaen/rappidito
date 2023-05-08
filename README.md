@@ -15,3 +15,7 @@ This projects is a rappi clone made with expo, react native and nativewind.
 - [x] Configure sanity
 - [x] Upload info to sanity
 - [ ] Create queries to call data
+
+## Final Demo
+
+![Demo](./assets/demo.mov)
